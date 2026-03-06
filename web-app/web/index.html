@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IoT dB Monitoring</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="container">
+
+    <header>
+      <h1>IoT dB Monitoring</h1>
+      <p class="subtitle">Realtime Acoustic Level</p>
+    </header>
+
+    <main>
+
+      <!-- SPL Meter -->
+      <div class="meter spl normal" id="splMeter">
+        <div class="label">SPL</div>
+        <div class="value">
+          <span id="spl">--</span>
+          <span class="unit">dB</span>
+        </div>
+      </div>
+
+      <!-- SNR Meter -->
+      <div class="meter snr">
+        <div class="label">SNR</div>
+        <div class="value">
+          <span id="snr">--</span>
+          <span class="unit">dB</span>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="meter chart">
+        <div class="label">SPL (Last 30 seconds)</div>
+        <canvas id="splChart"></canvas>
+      </div>
+
+    </main>
+
+    <footer>
+      <span id="status">STATUS: —</span>
+    </footer>
+
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
