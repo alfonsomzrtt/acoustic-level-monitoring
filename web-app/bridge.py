@@ -35,9 +35,9 @@ while True:
 
         data = {
             "dbfs":  float(parts[0]),
-            "noise": float(parts[1]),
-            "snr":   float(parts[2]),
-            "spl":   float(parts[3]),
+            # "noise": float(parts[1]),
+            # "snr":   float(parts[2]),
+            "spl":   float(parts[1]),
         }
 
         print(data)

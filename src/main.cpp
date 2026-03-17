@@ -9,7 +9,7 @@
 WiFi Configuration
 ===================================*/
 
-const char* ssid = "Juanda_airport";
+const char* ssid = "Juanda_airport"; 
 const char* password = "juandahebat";
 
 
@@ -79,7 +79,7 @@ int32_t i2sBuffer[DMA_BUF_LEN];
 #define RMS_WINDOW_SAMPLES 2000 // 125 ms @16kHz
 
 // DEFINE K_cal
-#define SPL_CAL_OFFSET 116.0f
+#define SPL_CAL_OFFSET 119.0f
 
 // int64_t sumsq = 0;
 /*Karena sekarang kita sudah di domain float (weighted adalah float),
@@ -109,7 +109,7 @@ void i2s_install()
       .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX),
       .sample_rate = SAMPLE_RATE,
       .bits_per_sample = I2S_BITS_PER_SAMPLE_32BIT,
-      .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT,
+      .channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
       .communication_format = I2S_COMM_FORMAT_I2S_MSB,
       .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
       .dma_buf_count = DMA_BUF_CNT,
@@ -252,7 +252,7 @@ log10(0), bukan meng-clamp RMS ke 1.*/
       lcd.print("        "); // clear area, 8 spasi, just in case kalau SPL naik ke 100+ dBA, which is unlikely to happen
       lcd.setCursor(5, 0);
       lcd.print(spl_smooth, 1);
-      lcd.print("dB(A)");
+      lcd.print("dBA");
 
       // lcd.setCursor(0, 1);
       // lcd.print("SNR:");
@@ -295,33 +295,56 @@ void setup()
   lcd.backlight();
   //  lcd.clear();
 
-  Serial.println();
-  Serial.print("Menghubungkan...");
-  Serial.print(ssid);
+  lcd.setCursor(0, 0);
+  lcd.print("Connecting to ");
+  lcd.setCursor(0, 1);
+  lcd.print(ssid);
 
+  delay(2000);
+  WiFi.mode(WIFI_STA);
+  // delay(100);
+  WiFi.setSleep(false);
   WiFi.begin(ssid, password);
 
+  unsigned long startAttempt = millis();
+
 //Menunggu hingga terhubung  
-  while (WiFi.status() != WL_CONNECTED) { 
+  while (WiFi.status() != WL_CONNECTED && millis() - startAttempt < 10000) { 
     delay(500);
-    Serial.print(".");
+
+    lcd.setCursor(15,1); 
+    lcd.print(".");
   }
 
-  Serial.println("");
-  Serial.println("WiFi terhubung.");
-  Serial.println("Alamat IP: ");
-  Serial.println(WiFi.localIP());
+  lcd.clear();
 
+  if (WiFi.status() == WL_CONNECTED) {
+  lcd.setCursor(0,0);
+  lcd.print("WiFi terhubung.");
 
+  lcd.setCursor(0,1);
+  lcd.print("Alamat IP: ");
+  
+  delay(2000);
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print(WiFi.localIP());
+
+  delay(2000);
+  } else {
+    lcd.setCursor(0,0);
+    lcd.println("WiFi gagal tersambung");
+    delay(2000);
+  }
+
+  lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("PA SPL Monitor");
+  lcd.print("SPL monitoring..");
   lcd.setCursor(0, 1);
   lcd.print("Initializing...");
   delay(1500);
   lcd.clear();
 
-  // Serial.println("dBFS,NoiseBaseline_dBA,SNR_dB,SPL_dBA");
-  Serial.println("dBFS");
 
   i2s_install();
   i2s_setpin();

@@ -1,24 +1,50 @@
 const splEl = document.getElementById("spl");
-const snrEl = document.getElementById("snr");
+const minEl = document.getElementById("min");
+const maxEl = document.getElementById("max");
+const avgEl = document.getElementById("avg");
+
 const statusEl = document.getElementById("status");
-const splMeter = document.getElementById("splMeter");
+
+
+let min = Infinity;
+let max = -Infinity;
+let sum = 0;
+let count = 0;
 
 // =========================
 // STATUS LOGIC
 // =========================
 function updateStatus(spl) {
-  splMeter.classList.remove("normal", "warning", "danger");
+  
 
-  if (spl < 60) {
-    splMeter.classList.add("normal");
+  if (spl < 60 ) {
     statusEl.textContent = "STATUS: NORMAL";
+    splEl.style.color = "#22C55E";
   } else if (spl < 80) {
-    splMeter.classList.add("warning");
     statusEl.textContent = "STATUS: WARNING";
+    splEl.style.color = "#FACC15";
   } else {
-    splMeter.classList.add("danger");
     statusEl.textContent = "STATUS: DANGER";
+    splEl.style.color = "#EF4444";
   }
+}
+
+function updateStats(spl){
+
+  const data = splData.datasets[0].data;
+
+  if (data.length === 0) return;
+
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+
+  const sum = data.reduce((a,b)=> a+b,0)
+  const avg = sum / data.length;
+
+  minEl.textContent = min.toFixed(1);
+  maxEl.textContent = max.toFixed(1);
+  avgEl.textContent = avg.toFixed(1);
+
 }
 
 // =========================
@@ -77,13 +103,13 @@ const evtSource = new EventSource("/events");
 evtSource.onmessage = (event) => {
   const data = JSON.parse(event.data);
   const spl = data.spl;
-  const snr = data.snr;
 
   // Update numbers
   splEl.textContent = spl.toFixed(1);
-  snrEl.textContent = snr.toFixed(1);
 
   updateStatus(spl);
+  updateStats();
+
 
   // Rolling window update
   const now = new Date().toLocaleTimeString();
@@ -92,8 +118,15 @@ evtSource.onmessage = (event) => {
   splData.datasets[0].data.push(spl);
 
   if (splData.labels.length > MAX_POINTS) {
+
     splData.labels.shift();
     splData.datasets[0].data.shift();
+
+    //reset statistics window
+    min = Infinity;
+    max = -Infinity;
+    sum = 0; 
+    count = 0;
   }
 
   splChart.update();

@@ -130,30 +130,30 @@ latest_data = None
 def serial_reader():
     global latest_data
 
-    ser = serial.Serial(
-        port=SERIAL_PORT,
-        baudrate=BAUDRATE,
-        timeout=1
-    )
-
     while True:
         try:
-            line = ser.readline().decode("utf-8").strip()
+            ser = serial.Serial(
+                port=SERIAL_PORT,
+                baudrate=BAUDRATE,
+                timeout=1
+            )
+            print("Serial connected")
 
-            if not line or "dBFS" in line:
-                continue
+            while True: 
+                line = ser.readline().decode().strip()
 
-            parts = line.split(",")
-            if len(parts) != 4:
-                continue
+                if "SPL" not in line:
+                    continue
 
-            latest_data = {
-                "dbfs":  float(parts[0]),
-                "noise": float(parts[1]),
-                "snr":   float(parts[2]),
-                "spl":   float(parts[3]),
-                "ts":    time.time()
-            }
+                try:
+                    spl = float(line.split("SPL:")[1])
+                except:
+                    continue  
+                    
+                latest_data = {
+                    "spl": spl,
+                    "ts":  time.time()
+                }
 
         except Exception as e:
             print("Serial error:", e)
@@ -162,30 +162,39 @@ def serial_reader():
 # =========================
 # FLASK APP
 # =========================
-app = Flask(__name__, static_folder="web")
+app = Flask(__name__, static_folder="frontend", static_url_path="")
 
 @app.route("/")
 def index():
-    return send_from_directory("web", "index.html")
+    return send_from_directory("frontend", "index.html")
 
 @app.route("/css/<path:filename>")
 def css_files(filename):
-    return send_from_directory("web/css", filename)
+    return send_from_directory("frontend/css", filename)
 
 @app.route("/js/<path:filename>")
 def js_files(filename):
-    return send_from_directory("web/js", filename)
+    return send_from_directory("frontend/js", filename)
 
 @app.route("/events")
 def sse_events():
     def event_stream():
         last_sent = None
+
         while True:
             if latest_data and latest_data != last_sent:
                 yield f"data: {json.dumps(latest_data)}\n\n"
                 last_sent = latest_data
+
             time.sleep(0.1)
-    return Response(event_stream(), mimetype="text/event-stream")
+
+    return Response(event_stream(), 
+                    mimetype="text/event-stream",
+                    headers={
+                        "Cache-Control": "no-cache",
+                        "X-Accel-Buffering": "no"
+                    }
+                )
 
 # =========================
 # MAIN

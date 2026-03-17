@@ -1,0 +1,134 @@
+:root {
+  --bg-app: #F8FAFC;
+  --bg-card: #FFFFFF;
+
+  --text-main: #0F172A;
+  --text-muted: #94A3B8;
+
+  --shadow-soft: 0 12px 28px rgba(15, 23, 42, 0.08);
+
+  --green: #22C55E;
+  --yellow: #FACC15;
+  --red: #EF4444;
+}
+
+/* ================= Base ================= */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: linear-gradient(180deg, #F8FAFC, #EEF2F7);
+  color: var(--text-main);
+}
+
+/* ================= Layout ================= */
+.container {
+  min-height: 100vh;
+  padding: 28px;
+  display: flex;
+  flex-direction:   column;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+/* ================= DASHBOARD ================= */
+.dashboard {
+  max-width: 900px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+
+h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.subtitle {
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* ================= Main ================= */
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+
+/* ================= SPL MAIN ================= */
+.spl-main {
+  text-align: center;
+}
+
+.spl-value {
+  font-size: 72px;
+  font-weight: 700;
+}
+
+.unit {
+  font-size: 28px;
+  margin-left: 6px;
+}
+
+.spl-label {
+  color: #94A3B8;
+  font-size: 14px;
+}
+
+/* ================= STATS ================= */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 400px;
+  margin: auto;
+  gap: 30px;
+  text-align: center;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.stat-label {
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+/* ================= CHART ================= */
+
+.chart-card {
+  background: var(--bg-card);
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: var(--shadow-soft);
+  height: 360px;
+}
+
+.chart-card .label {
+  margin-bottom: 16px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.chart-card canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
