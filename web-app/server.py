@@ -123,7 +123,7 @@ BAUDRATE = 115200
 # SHARED STATE
 # =========================
 latest_data = None
-
+lock = threading.Lock()
 # =========================
 # SERIAL READER THREAD
 # =========================
@@ -132,11 +132,10 @@ def serial_reader():
 
     while True:
         try:
-            ser = serial.Serial(
+          with serial.Serial(
                 port=SERIAL_PORT,
                 baudrate=BAUDRATE,
-                timeout=1
-            )
+                timeout=1) as ser:
             print("Serial connected")
 
             while True: 
@@ -146,18 +145,21 @@ def serial_reader():
                     continue
 
                 try:
-                    spl = float(line.split("SPL:")[1])
+                    spl_str = line.split("SPL:")[1]. strip()
+                    spl = float(spl_str)
+
+                    with lock:
+                        latest_data = {
+                            "spl": spl,
+                            "time": time.time()
+                        }
+
                 except:
                     continue  
-                    
-                latest_data = {
-                    "spl": spl,
-                    "ts":  time.time()
-                }
 
         except Exception as e:
             print("Serial error:", e)
-            time.sleep(1)
+            time.sleep(2) #Jangan terlalu agresif
 
 # =========================
 # FLASK APP
@@ -182,12 +184,21 @@ def sse_events():
         last_sent = None
 
         while True:
-            if latest_data and latest_data != last_sent:
-                yield f"data: {json.dumps(latest_data)}\n\n"
-                last_sent = latest_data
+            try:
+                with lock:
+                    data = latest_data
 
-            time.sleep(0.1)
+                if data and data != last_sent:
+                    yield f"data: {json.dumps(data)}\n\n"
+                    last_sent = data
 
+                time.sleep(0.1)
+                
+            except GeneratorExit:
+                print("Client disconnected")
+                break
+
+    
     return Response(event_stream(), 
                     mimetype="text/event-stream",
                     headers={

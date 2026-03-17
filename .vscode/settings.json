@@ -1,0 +1,6 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/web-app/venv/Scripts/python.exe",
+    "terminal.integrated.env.windows": {
+      "PATH": "${workspaceFolder}/web-app/venv/Scripts;${env:PATH}"
+    }
+  }
