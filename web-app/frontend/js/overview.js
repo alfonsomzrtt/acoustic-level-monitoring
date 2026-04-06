@@ -9,8 +9,8 @@ const PASS = "RajaSawit_2026";
 const TIMEOUT = 10000; // ms → dianggap offline
 
 // 1. Tentukan daftar gate yang dimiliki, hardcoded
-const raw_nodes = ["gate1", "gate2", "gate3", "gate4", "gate5", "gate6"];
-const INITIAL_NODES = raw_nodes.map(node => node.toUpperCase());
+const INITIAL_NODES = ["GATE1", "GATE2", "GATE3", "GATE4", "GATE5", "GATE6" ];
+// const INITIAL_NODES = raw_nodes.map(node => node.toUpperCase());
 const nodes = {}; 
 
 
@@ -22,6 +22,16 @@ const grid = document.getElementById("grid");
 // CREATE CARD (Living Card)
 // =========================
 function createCard(nodeId) {
+  // CEK APAKAH ADA INGATAN LAMA?
+  const saved = JSON.parse(localStorage.getItem(`cache_${nodeId}`));
+    
+  // Jika ada, pakai itu sebagai default, jika tidak pakai "--"
+  const displayVal = saved ? saved.val : "--";
+  const displayTime = saved ? `Last Updated: ${saved.date}<br>${saved.time}` : "Last updated: Never";
+  const initialClass = saved ? "card offline" : "card offline"; // Tetap offline sampai MQTT masuk
+// Jika ada data lama, kita biarkan status visualnya 'offline' tapi angkanya ada
+
+  console.log("Membuat kartu untuk:", nodeId);
   //mencegah duplikasi jika card sudah diinisialisasi
   if (nodes[nodeId]) return;
 
@@ -40,7 +50,7 @@ function createCard(nodeId) {
 
   <div class="card-body">
         <div class="main-stat">
-            <h2 class="value">--</h2>
+            <h2 class="value">${displayVal}</h2>
             <span class="unit">dBA</span>
         </div>
         <div class="trend-indicator trend-neutral">
@@ -50,7 +60,7 @@ function createCard(nodeId) {
   </div>
 
   <div class="card-footer">
-        <span class="last-seen">Last updated: Never</span>
+        <span class="last-seen">${displayTime}</span>
   </div>
   `;
 
@@ -61,10 +71,9 @@ function createCard(nodeId) {
   grid.appendChild(el);
 
   nodes[nodeId] = {
-    value: null,
-    lastUpdate: 0, //langsung dianggap Watchdog offline
+    value: saved ? parseFloat(saved.val) : null, // Masukkan nilai lama ke memori agar tren akurat    lastUpdate: 0, //langsung dianggap Watchdog offline
     el: el,
-    previousValue: null //dibutuhkan untuk menghitung tren
+    previousValue: saved ? parseFloat(saved.val) : null //dibutuhkan untuk menghitung tren
   };
 }
 
@@ -98,7 +107,7 @@ function updateCard(nodeId, value) {
     }
   
     // 2. Update State
-    node.previousValue = value;
+    node.previousValue = value; 
     node.value = value;
     node.lastUpdate = Date.now();
   
@@ -116,13 +125,37 @@ function updateCard(nodeId, value) {
   
     // Update Status & Time
     el.querySelector(".status-text").textContent = "ONLINE";
-    el.querySelector(".last-seen").textContent = "Updated: " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+    const now = new Date(); //ambil waktu sekarang
+    // Format Tanggal: 06/04/26
+    const dateStr = now.toLocaleDateString('id-ID', { 
+      day: '2-digit', 
+      month: '2-digit', 
+      year: '2-digit' 
+    });
+
+    // Format Jam: 11:20 AM
+    const timeStr = now.toLocaleTimeString([], { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });    
+
+    // Gabungkan menjadi "Updated: 06/04/26 11:20 AM"
+    el.querySelector(".last-seen").innerHTML = `Updated: ${dateStr}<br>${timeStr}`;
   
     // 4. Update Level Bahaya (Card Border/Glow)
     el.classList.remove("online", "warning", "danger", "offline");
     if (value > 80) el.classList.add("danger", "online");
     else if (value > 60) el.classList.add("warning", "online");
     else el.classList.add("online");
+
+// SIMPAN KE STORAGE (Gunakan variabel yang sudah ada agar sinkron)
+    const cacheData = {
+      val: value.toFixed(1),
+      time: timeStr,
+      date: dateStr
+    };
+      localStorage.setItem(`cache_${nodeId}`, JSON.stringify(cacheData));
   }
 
 // =========================
@@ -138,7 +171,7 @@ function checkOffline() {
     if (now - node.lastUpdate > TIMEOUT) {
       const el = node.el;
 
-     //Peraiki selector agar tidak null
+     //Perbaiki selector agar tidak null
      const statusText = el.querySelector(".status-text");
      if (statusText) statusText.textContent = "OFFLINE";
 
@@ -172,7 +205,7 @@ client.onMessageArrived = function (message) {
 
   // Ekstrak nodeId dari topic monitoring/nodeId/db
   // contoh topic: monitoring/gate1/db
-  const nodeId = topic.split("/")[1];
+  const nodeId = topic.split("/")[1].toUpperCase();
 
   let value;
 

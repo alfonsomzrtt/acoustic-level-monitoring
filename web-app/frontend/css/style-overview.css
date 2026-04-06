@@ -1,11 +1,16 @@
 :root {
-  --bg-app: #0F172A;      /* Biru gelap pekat */
-  --bg-card: #1E293B;     /* Biru slate untuk kartu */
-  --text-main: #F8FAFC;   /* Putih bersih */
-  --text-muted: #94A3B8;  /* Abu-abu slate */
+/* Diambil dari palet Noctis: Biru yang lebih 'airy' dan tidak sepekat Slate */
+  --bg-app: #1B2936;       /* Latar belakang utama (lebih terang & kebiruan) */
+  --bg-card: #253341;      /* Latar kartu (kontras yang lebih halus dengan bg-app) */
+  
+  /* Teks diturunkan sedikit dari putih bersih ke off-white agar tidak silau */
+  --text-main: #E2E8F0;    /* Putih Noctis (lebih adem) */
+  --text-muted: #8E9FB1;   /* Abu-abu kebiruan untuk teks pendukung */
   --green: #22C55E;
   --yellow: #FACC15;
   --red: #EF4444;
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.3);
+
 }
 
 body {

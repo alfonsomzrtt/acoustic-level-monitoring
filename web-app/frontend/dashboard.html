@@ -10,12 +10,11 @@
 
 </head>
 <body>
-  <!-- <a href="index.html">← Back</a> -->
 
   <div class="container">
 
-    <header>
-      <h1></h1>
+    <header class="header">
+      <h1 id="node-id">NODE: --</h1>
       <p class="subtitle">Realtime Sound Pressure Level</p>
     </header>
 
@@ -31,23 +30,21 @@
         </div>
       
         <!-- Statistik -->
-        <div class="stats">
-      
-          <div class="stat">
+        <div class="stats">      
+          <div class="stat-item">
             <div class="stat-value" id="min">--</div>
             <div class="stat-label">MIN</div>
           </div>
       
-          <div class="stat">
+          <div class="stat-item">
             <div class="stat-value" id="avg">--</div>
             <div class="stat-label">AVG</div>
           </div>
       
-          <div class="stat">
+          <div class="stat-item">
             <div class="stat-value" id="max">--</div>
             <div class="stat-label">MAX</div>
-          </div>
-      
+          </div>      
         </div>
       
         <!-- Chart -->
@@ -68,7 +65,6 @@
   <!-- JS -->
   <!-- jangan pakai versi .min.js -->
   <script src="https://unpkg.com/paho-mqtt@1.0.3/mqttws31.js"></script>
-  <!-- <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/app.js"></script>
 

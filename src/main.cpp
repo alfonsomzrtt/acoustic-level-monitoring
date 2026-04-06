@@ -410,7 +410,7 @@ String topic_pub = "monitoring/" + String(NODE_ID) + "/db";
 unsigned long lastReconnectAttempt = 0;
 
 unsigned long lastPublish = 0;
-#define PUBLISH_INTERVAL 5000 // ubah ke berapa detik rate stream data yang diinginkan
+#define PUBLISH_INTERVAL 5000 // ubah ke berapa detik rate publish data yang diinginkan
 
 void reconnectMQTT() {
   if (client.connected()) return;

@@ -161,9 +161,6 @@ const TIMEOUT = 5000; // ms
 const params = new URLSearchParams(window.location.search);
 const nodeId = params.get("node") || "unknown";
 
-// update title (optional)
-document.querySelector("h1").textContent = "Node: " + nodeId;
-
 // =========================
 // DOM ELEMENTS
 // =========================
@@ -193,6 +190,26 @@ function updateStatus(spl) {
     splEl.style.color = "#EF4444";
   }
 }
+
+// =========================
+// PERSISTENCE: LOAD CACHE
+// =========================
+const saved = JSON.parse(localStorage.getItem(`cache_${nodeId.toUpperCase()}`));
+
+if (saved && splEl) {
+  splEl.textContent = saved.val; // Tampilkan angka terakhir
+  const subtitleEl = document.querySelector(".subtitle");
+  if (subtitleEl) {
+    subtitleEl.textContent = `Realtime Sound Pressure Level | Last Updated: ${saved.date} ${saved.time}`;
+  }
+  // Optional: Update warna status berdasarkan nilai terakhir
+  updateStatus(parseFloat(saved.val));
+}
+
+// update title (optional)
+document.querySelector("h1").textContent = "Node: " + nodeId;
+
+
 
 // =========================
 // STATS
@@ -288,10 +305,38 @@ client.onMessageArrived = function (message) {
   splEl.textContent = spl.toFixed(1);
   updateStatus(spl);
 
-  // chart update
-  const now = new Date().toLocaleTimeString();
 
-  splData.labels.push(now);
+  // 2. LOGIKA BARU: Update Timestamp di Subtitle
+  const now = new Date(); //Ambil waktu sistem
+
+  // Format Tanggal: 06/04/26
+  const dateStr = now.toLocaleDateString('id-ID', { 
+    day: '2-digit', 
+    month: '2-digit', 
+    year: '2-digit' 
+  });
+  
+  // Format Jam: 11:29 AM
+  const timeStr = now.toLocaleTimeString([], { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+
+    // SIMPAN KE LOCAL STORAGE
+  const cacheData = {
+    val: spl.toFixed(1),
+    time: timeStr,
+    date: dateStr
+  };
+  localStorage.setItem(`cache_${nodeId.toUpperCase()}`, JSON.stringify(cacheData));
+
+  // Update elemen subtitle agar sinkron dengan Overview
+  const subtitleEl = document.querySelector(".subtitle");
+  if (subtitleEl) {
+    subtitleEl.textContent = `Realtime Sound Pressure Level | Updated: ${dateStr} ${timeStr}`;
+  }
+
+  splData.labels.push(timeStr);
   splData.datasets[0].data.push(spl);
 
   if (splData.labels.length > MAX_POINTS) {
@@ -326,7 +371,10 @@ client.connect({
 // OFFLINE WATCHDOG
 // =========================
 setInterval(() => {
-  if (Date.now() - lastUpdate > TIMEOUT) {
+  if (lastUpdate !== 0 && (Date.now() - lastUpdate > TIMEOUT)) {
     statusEl.textContent = "STATUS: OFFLINE";
+    statusEl.style.color = "#94A3B8"; // Beri warna redup saat offline
+    
+    // JANGAN mereset splEl ke "--" di sini agar persistence terjaga
   }
 }, 2000);

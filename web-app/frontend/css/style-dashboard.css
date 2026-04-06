@@ -1,10 +1,12 @@
 /* ================= ROOT ================= */
 :root {
-  --bg-app: #0F172A;      /* Biru gelap pekat (Slate-900) */
-  --bg-card: #1E293B;     /* Biru slate untuk kartu (Slate-800) */
-  --text-main: #F8FAFC;   /* Putih bersih */
-  --text-muted: #94A3B8;  /* Abu-abu slate */
+/* Diambil dari palet Noctis: Biru yang lebih 'airy' dan tidak sepekat Slate */
+  --bg-app: #1B2936;       /* Latar belakang utama (lebih terang & kebiruan) */
+  --bg-card: #253341;      /* Latar kartu (kontras yang lebih halus dengan bg-app) */
   
+  /* Teks diturunkan sedikit dari putih bersih ke off-white agar tidak silau */
+  --text-main: #E2E8F0;    /* Putih Noctis (lebih adem) */
+  --text-muted: #8E9FB1;   /* Abu-abu kebiruan untuk teks pendukung */
   --green: #22C55E;
   --yellow: #FACC15;
   --red: #EF4444;
@@ -50,11 +52,13 @@ body {
 }
 
 .subtitle {
-  margin-top: 8px;
-  color: var(--text-muted);
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  margin-top: 10px;           /* Beri ruang sedikit lebih besar dari judul */
+  color: var(--text-muted);   /* Gunakan warna abu-abu Noctis */
+  font-size: 13px;            /* Perkecil sedikit agar teks panjang tetap satu baris */
+  font-weight: 600;
+  letter-spacing: 0.5px;      /* Kurangi spacing agar tidak terlalu melar */
+  text-transform: none;       /* WAJIB: Ubah ke 'none' agar format AM/PM dan tanggal tidak jadi kapital semua */
+  opacity: 0.9;
 }
 
 /* ================= SPL MAIN ================= */
@@ -86,6 +90,8 @@ body {
   bottom: 20px;
   font-size: 24px;
   color: var(--text-muted);
+  opacity: 0.7;
+  font-weight: 400;
 }
 
 .spl-label {
