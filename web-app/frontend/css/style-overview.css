@@ -1,0 +1,127 @@
+:root {
+  --bg-app: #0F172A;      /* Biru gelap pekat */
+  --bg-card: #1E293B;     /* Biru slate untuk kartu */
+  --text-main: #F8FAFC;   /* Putih bersih */
+  --text-muted: #94A3B8;  /* Abu-abu slate */
+  --green: #22C55E;
+  --yellow: #FACC15;
+  --red: #EF4444;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+.page {
+  max-width: 1200px; /* Batasi lebar agar tidak terlalu melar di monitor wide */
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* ================= GRID MATRIX ================= */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsif otomatis */
+  gap: 20px;
+  width: 100%;
+}
+
+/* ================= DARK CARD STYLE ================= */
+.card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #334155;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.node-badge {
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #475569;
+}
+
+/* Typography Inside Card */
+.value {
+  font-size: 32px !important;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 10px 0;
+}
+
+.unit {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.last-seen {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+/* ================= STATUS STATES ================= */
+
+/* ONLINE */
+.card.online {
+  border-left: 5px solid var(--green);
+  /* Jangan gunakan background putih agar teks putih tetap terbaca */
+  background: linear-gradient(145deg, #1E293B, #111827); 
+}
+.card.online .status-dot {
+  background: var(--green);
+  box-shadow: 0 0 10px var(--green);
+}
+
+/* OFFLINE */
+.card.offline {
+  opacity: 0.5;
+  border-left: 5px solid #475569;
+}
+
+/* WARNING & DANGER */
+.card.warning { border-left: 5px solid var(--yellow); }
+.card.danger { border-left: 5px solid var(--red); }
