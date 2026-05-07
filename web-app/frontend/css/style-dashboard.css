@@ -179,3 +179,35 @@ canvas {
   letter-spacing: 1px;
   color: var(--green); /* Default warna normal */
 }
+
+.chart-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/*Button Ekspor CSV */
+.btn-export {
+  background-color: #48bb78;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: right;
+  gap: 8px;
+}
+
+.btn-export:hover {
+  background-color: #38A169;
+  transform: translateY(-1px);
+}
+
+.btn-export:active {
+  transform: translateY(0);
+}

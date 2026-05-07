@@ -11,6 +11,8 @@ const PASS = "RajaSawit_2026";
 const MAX_POINTS = 30;
 const TIMEOUT = 5000; // ms
 
+let logBuffer = [];
+
 // =========================
 // GET NODE FROM URL
 // =========================
@@ -153,6 +155,14 @@ client.onMessageArrived = function (message) {
     spl = parseFloat(payload);
   }
 
+  if (spl !== undefined && !isNaN(spl)) {
+    const timestamp = new Date().toLocaleString();
+    logBuffer.push({ time: timestamp, spl: spl.toFixed(1) });
+
+//batasi logbuffernya agar tidak terlalu berat
+    if (logBuffer.length > 5000) logBuffer.shift();
+  }
+
   if (isNaN(spl)) return;
 
   lastUpdate = Date.now();
@@ -234,3 +244,47 @@ setInterval(() => {
     // JANGAN mereset splEl ke "--" di sini agar persistence terjaga
   }
 }, 2000);
+
+//Fungsi Download Log CSV 
+function downloadCSV() {
+  if (logBuffer.length === 0) {
+    alert('Belum ada data terkumpul untuk diunduh!');
+    return;
+  }
+
+  //Ambil waktu sistem
+  const now = new Date(); 
+
+  //Format tanggal: 07-05-26 (Ganti '/' menjadi '-' agar aman untuk nama file)
+  const dateFile = now.toLocaleDateString('id-ID', {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit'
+  }).replace(/\//g, '-');
+
+  // Format Jam: 11:29 AM
+  const timeFile = now.toLocaleTimeString([], { 
+    hour: '2-digit', 
+    minute: '2-digit'
+  }).replace(':', '-');
+
+//Susun isi CSV 
+  let csvContent = "Timestamp,SPL (dBA)\n";
+  logBuffer.forEach(row => {
+    csvContent += `${row.time},${row.spl}\n`;
+  });
+
+  const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+
+
+  const link = document.createElement("a");
+  link.setAttribute("href", url);
+
+  link.setAttribute("download", `${nodeId}_${dateFile}_${timeFile}_log.csv`);
+  document.body.appendChild(link);
+  link.click();
+
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
