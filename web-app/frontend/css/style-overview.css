@@ -1,5 +1,75 @@
+/* ================= ROOT ================= */
 :root {
-/* Diambil dari palet Noctis: Biru yang lebih 'airy' dan tidak sepekat Slate */
+  /* Versi terang dari palet Noctis */
+  --bg-app: #F1F5F9;       /* Abu-abu kebiruan sangat terang */
+  --bg-card: #FFFFFF;      /* Putih bersih untuk kartu */
+  
+  --text-main: #1B2936;    /* Menggunakan warna gelap Anda sebagai teks */
+  --text-muted: #64748B;
+  
+  --green: #22C55E;
+  --yellow: #FACC15;
+  --red: #EF4444;
+  
+  /* PERBAIKAN: Gunakan warna yang lebih soft untuk Light Mode */
+  --border-color: #CBD5E1; 
+  --shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.08);
+  --card-gradient: linear-gradient(145deg, #ffffff, #f1f5f9); 
+}
+  
+  
+  /* --- CSS Toggle ganti tema */
+  .theme-switch-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+  }
+  
+  .theme-checkbox {
+    --toggle-size: 8px; /* Saya perkecil sedikit agar proporsional sebagai floating button */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 6.25em;
+    height: 3.125em;
+    background: linear-gradient(to right, #efefef 50%, #2a2a2a 50%) no-repeat;
+    background-size: 205%;
+    background-position: 0;
+    transition: 0.4s;
+    border-radius: 99em;
+    position: relative;
+    cursor: pointer;
+    font-size: var(--toggle-size);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Tambahan shadow agar terlihat melayang */
+  }
+  
+  .theme-checkbox::before {
+    content: "";
+    width: 2.25em;
+    height: 2.25em;
+    position: absolute;
+    top: 0.438em;
+    left: 0.438em;
+    background: linear-gradient(to right, #efefef 50%, #2a2a2a 50%) no-repeat;
+    background-size: 205%;
+    background-position: 100%;
+    border-radius: 50%;
+    transition: 0.4s;
+  }
+  
+  .theme-checkbox:checked::before {
+    left: calc(100% - 2.25em - 0.438em);
+    background-position: 0;
+  }
+  
+  .theme-checkbox:checked {
+    background-position: 100%;
+  }
+  
+  [data-theme="dark"] {
+    /* ================= MODE GELAP (Noctis Palette) ================= */
+  /* Diambil dari palet Noctis: Biru yang lebih 'airy' dan tidak sepekat Slate */
   --bg-app: #1B2936;       /* Latar belakang utama (lebih terang & kebiruan) */
   --bg-card: #253341;      /* Latar kartu (kontras yang lebih halus dengan bg-app) */
   
@@ -9,17 +79,21 @@
   --green: #22C55E;
   --yellow: #FACC15;
   --red: #EF4444;
+  
+  --border-color: #334155; /* Warna asli kamu untuk dark mode */
   --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.3);
-
-}
+  --card-gradient: linear-gradient(145deg, #1E293B, #111827);
+  }
+  
 
 body {
   margin: 0;
-  padding: 0;
+  padding: 0; 
+  font-family: system-ui, -apple-system, sans-serif;
   background-color: var(--bg-app);
   color: var(--text-main);
-  font-family: system-ui, -apple-system, sans-serif;
   min-height: 100vh;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .page {
@@ -50,15 +124,16 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid #334155;
-  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease; 
   position: relative;
   overflow: hidden;
+  box-shadow: var(--shadow-soft); /* GUNAKAN VARIABEL */
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  box-shadow: var(--shadow-soft);
 }
 
 .card-header {
@@ -86,7 +161,7 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #475569;
+  background: var(--text-muted);
 }
 
 /* Typography Inside Card */
@@ -114,7 +189,7 @@ body {
 .card.online {
   border-left: 5px solid var(--green);
   /* Jangan gunakan background putih agar teks putih tetap terbaca */
-  background: linear-gradient(145deg, #1E293B, #111827); 
+  background: var(--card-gradient); 
 }
 .card.online .status-dot {
   background: var(--green);
