@@ -53,6 +53,7 @@ graph TD
     H --> I
     I --> J
 ```
+### INMP441 I2S Mems Microphone 
 <p align="center">
     <img src="https://github.com/user-attachments/assets/72507554-423b-49eb-84ca-8a3a8c95f720" width="80%" alt="INMP441 Pinout" />
     <br>
