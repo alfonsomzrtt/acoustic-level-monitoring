@@ -54,7 +54,7 @@ graph TD
 ```
 ###  Pinout Configuration
 <p align="center">
-    <img src="https://github.com/user-attachments/assets/d8384847-558e-412a-b889-ae979ed86af9" width="80%" alt="Pinout Configuration with ESP32 DevKit V1 board" />
+    <img src="image1.png" width="80%" alt="Pinout Configuration with ESP32 DevKit V1 board" />
     <br>
     <em>Pinout Configuration with ESP32 DevKit V1 board</em>
     <br>
