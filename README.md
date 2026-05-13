@@ -56,9 +56,9 @@ graph TD
 <p align="center">
     <img src="https://github.com/user-attachments/assets/d8384847-558e-412a-b889-ae979ed86af9" width="80%" alt="Pinout Configuration with ESP32 DevKit V1 board" />
     <br>
-    <em>INMP441 Pinout</em>
+    <em>Pinout Configuration with ESP32 DevKit V1 board</em>
     <br>
-    <em>source: https://docs.cirkitdesigner.com/component/f5a2b2c1-1830-47a0-bebd-4ccef6a7babd/inmp441-front-mic</em>
+    <em>source: https://docs.cirkitdesigner.com/</em>
 </p>
 
 The system operates in **I2S Standard Mode (Philips)**, allowing for a direct 24-bit digital stream from the MEMS sensor to the ESP32's internal DMA buffer.
