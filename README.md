@@ -11,8 +11,10 @@ I will try to comprise everything in this following items:
 - System Design/Architecture
 - Firmware Logics/DSP Pipeline
 - Pinout and Configuration
-- 3D print and enclosure
-- Probably Bill of Materials (BOMs)
+- Web-app dashboard
+- MQTT Network Protocol 
+- 3D print and Enclosure Box
+- Bill of Materials (BOMs)
 
 ### System Architecture
 ```mermaid
@@ -58,7 +60,7 @@ graph TD
     <br>
     <em>Pinout Configuration with ESP32 DevKit V1 board</em>
     <br>
-    <em>source: https://docs.cirkitdesigner.com/</em>
+    <em>source: https://cirkitdesigner.com/</em>
 </p>
 
 The system operates in **I2S Standard Mode (Philips)**, allowing for a direct 24-bit digital stream from the MEMS sensor to the ESP32's internal DMA buffer.
