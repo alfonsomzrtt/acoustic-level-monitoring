@@ -53,10 +53,18 @@ graph TD
     H --> I
     I --> J
 ```
-
-<img width="249" height="251" alt="image" src="https://github.com/user-attachments/assets/72507554-423b-49eb-84ca-8a3a8c95f720" />
-
-
+<p align="center">
+    <img src="https://github.com/user-attachments/assets/72507554-423b-49eb-84ca-8a3a8c95f720" width="80%" alt="INMP441 Pinout" />
+</p>
+### INMP441 Pinout Configuration
+| INMP441 Pin | ESP32 Pin | Function | Description |
+| :--- | :--- | :--- | :--- |
+| **VDD** | 3V3 | Power | Power supply (1.62V - 3.63V) |
+| **GND** | GND | Ground | Common system ground |
+| **L/R** | GND | Channel Select | Pulled to GND for Left Channel acquisition |
+| **WS** | GPIO 25 | Word Select | I2S Word/Slot select line |
+| **SCK** | GPIO 26 | Bit Clock | I2S Serial Clock line |
+| **SD** | GPIO 33 | Serial Data | I2S Digital Data output |
 
 
 
