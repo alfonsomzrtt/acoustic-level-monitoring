@@ -53,6 +53,14 @@ graph TD
     H --> I
     I --> J
 ```
+
+<img width="994" height="998" alt="image" src="https://github.com/user-attachments/assets/801a65c7-3ce2-4fd2-9a08-daaded9d6924" />
+
+
+
+
+
+
 ### Firmware Logics/DSP Pipeline
 ```mermaid
 flowchart TD
