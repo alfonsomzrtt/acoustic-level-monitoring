@@ -55,8 +55,13 @@ graph TD
 ```
 <p align="center">
     <img src="https://github.com/user-attachments/assets/72507554-423b-49eb-84ca-8a3a8c95f720" width="80%" alt="INMP441 Pinout" />
+    <br>
+    <em>INMP441 Pinout</em>
+    <br>
+    <em>source: https://docs.cirkitdesigner.com/component/f5a2b2c1-1830-47a0-bebd-4ccef6a7babd/inmp441-front-mic</em>
 </p>
-### INMP441 Pinout Configuration
+
+ INMP441 Pinout Configuration
 | INMP441 Pin | ESP32 Pin | Function | Description |
 | :--- | :--- | :--- | :--- |
 | **VDD** | 3V3 | Power | Power supply (1.62V - 3.63V) |
