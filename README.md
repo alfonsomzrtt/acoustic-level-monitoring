@@ -39,7 +39,7 @@ graph TD
     end
 
     subgraph Web["User Interface (Monitoring)"]
-        I[Web Dashboard Dashboard.html]
+        I[Web Dashboard overview.html, dashboard.html]
         J[Client-Side CSV Export]
     end
 
