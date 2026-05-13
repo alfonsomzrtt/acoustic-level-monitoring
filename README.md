@@ -61,6 +61,7 @@ graph TD
     <br>
     <em>source: https://docs.cirkitdesigner.com/component/f5a2b2c1-1830-47a0-bebd-4ccef6a7babd/inmp441-front-mic</em>
 </p>
+The system operates in **I2S Standard Mode (Philips)**, allowing for a direct 24-bit digital stream from the MEMS sensor to the ESP32's internal DMA buffer.
 
 | INMP441 Pin | ESP32 Pin | Function | Description |
 | :--- | :--- | :--- | :--- |
@@ -70,7 +71,7 @@ graph TD
 | **WS** | GPIO 25 | Word Select | I2S Word/Slot select line |
 | **SCK** | GPIO 26 | Bit Clock | I2S Serial Clock line |
 | **SD** | GPIO 33 | Serial Data | I2S Digital Data output |
-
+> **Note:** The **MCLK (Master Clock)** line is not required for this implementation, as the INMP441 generates its internal timing from the SCK line.
 
 
 
