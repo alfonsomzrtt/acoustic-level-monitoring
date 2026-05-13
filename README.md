@@ -54,6 +54,12 @@ graph TD
     H --> I
     I --> J
 ```
+
+This is the system architecture flowchart, covering end-to-end from sensor (sensing layer) and raw data acquisition to client-side, end-user web-app monitoring dashboard (application layer). The system works in this direction: 
+- First
+- asdasd
+- adasd
+- 
 ###  Pinout Configuration
 <p align="center">
     <img src="image1.png" width="80%" alt="Pinout Configuration with ESP32 DevKit V1 board" />
