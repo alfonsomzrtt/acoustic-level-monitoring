@@ -7,13 +7,12 @@ The quality and configuration of the Public Address (PA) system significantly in
 
 To resolve these issues, I developed a low-cost, functional IoT Sound Pressure Level Monitoring and data acquisition system. Using the INMP441 MEMS I2S microphone and ESP32 microcontroller as the core hardware, the system connects to a web-based dashboard. This allows local technicians to remotely monitor devices in real time, eliminating the need for frequent physical site visits.
 
-I will try to comprise everything in this following items: 
-1. System Design/Architecture
-1.1
-2.
-2.1
-3. 
-3.1
+I will try to comprise everything in this following items:
+- System Design/Architecture
+- Firmware Logics/DSP Pipeline
+- Pinout and Configuration
+- 3D print and enclosure
+- Probably Bill of Materials (BOMs)
 
 ### System Architecture
 ```mermaid
