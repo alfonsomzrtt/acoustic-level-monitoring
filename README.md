@@ -79,7 +79,7 @@ The system operates in **I2S Standard Mode (Philips)**, allowing for a direct 24
 | **GND** | GND | Ground | Common Ground  |
 | **SDA** | GPIO 21 | Serial Data | I2C Serial Data Line |
 | **SCL** | GPIO 22 | Serial Clock |  I2C Serial CLock Line |
-> **Note:** The **LCD 16x2 I2C** usually requires stable 5V power supply for maximal contrast, while INMP441 is ought to 3.3v according to the datasheet.
+> **Note:** The **LCD 16x2 I2C** usually requires stable 5V power supply for best contrast, while INMP441 must use 3.3v according to the datasheet.
 
 
 ### Firmware Logics/DSP Pipeline
