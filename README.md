@@ -52,9 +52,9 @@ graph TD
     H --> I
     I --> J
 ```
-### INMP441 I2S Mems Microphone Pinout Configuration
+###  Pinout Configuration
 <p align="center">
-    <img src="https://github.com/user-attachments/assets/72507554-423b-49eb-84ca-8a3a8c95f720" width="80%" alt="INMP441 Pinout" />
+    <img src="https://github.com/user-attachments/assets/d8384847-558e-412a-b889-ae979ed86af9" width="80%" alt="Pinout Configuration with ESP32 DevKit V1 board" />
     <br>
     <em>INMP441 Pinout</em>
     <br>
@@ -73,6 +73,13 @@ The system operates in **I2S Standard Mode (Philips)**, allowing for a direct 24
 | **SD** | GPIO 33 | Serial Data | I2S Digital Data output |
 > **Note:** The **MCLK (Master Clock)** line is not required for this implementation, as the INMP441 generates its internal timing from the SCK line.
 
+| LCD I2C Pin | ESP32 Pin | Function | Description |
+| :--- | :--- | :--- | :--- |
+| **VDD** | VIN | Power | Recommended power supply 5V |
+| **GND** | GND | Ground | Common Ground  |
+| **SDA** | GPIO 21 | Serial Data | I2C Serial Data Line |
+| **SCL** | GPIO 22 | Serial Clock |  I2C Serial CLock Line |
+> **Note:** The **LCD 16x2 I2C** usually requires stable 5V power supply for maximal contrast, while INMP441 is ought to 3.3v according to the datasheet.
 
 
 ### Firmware Logics/DSP Pipeline
