@@ -84,6 +84,17 @@
   --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.3);
   --card-gradient: linear-gradient(145deg, #1E293B, #111827);
   }
+
+/* Fail-safe: Jika data-theme dark aktif, pastikan visual toggle mengikuti 
+   bahkan sebelum JavaScript selesai melakukan sinkronisasi pada input */
+   [data-theme="dark"] .theme-checkbox {
+    background-position: 100%;
+}
+
+[data-theme="dark"] .theme-checkbox::before {
+    left: calc(100% - 2.25em - 0.438em);
+    background-position: 0;
+}
   
 
 body {

@@ -1,12 +1,11 @@
-
 //tes kode baru
 // =========================
 // CONFIG
 // =========================
-const BROKER = "b8ae4809915f4027b2d18c7fc219b204.s1.eu.hivemq.cloud";
-const PORT = 8884;
-const USER = "esp32-v1";
-const PASS = "RajaSawit_2026";
+const BROKER = "__MQTT_BROKER__";
+const PORT = "__MQTT_PORT__";
+const USER = "__MQTT_USER__";
+const PASS = "__MQTT_PASS__";
 
 const MAX_POINTS = 30;
 const TIMEOUT = 5000; // ms
@@ -269,9 +268,9 @@ function downloadCSV() {
   }).replace(':', '-');
 
 //Susun isi CSV 
-  let csvContent = "Timestamp,SPL (dBA)\n";
+  let csvContent = '"Timestamp","SPL (dBA)"\n';
   logBuffer.forEach(row => {
-    csvContent += `${row.time},${row.spl}\n`;
+    csvContent += `"${row.time}","${row.spl}"\n`;
   });
 
   const blob = new Blob([csvContent], {type: 'text/csv;charset=utf-8;' });
@@ -290,25 +289,36 @@ function downloadCSV() {
 }
 
 const toggleSwitch = document.querySelector('#theme-toggle');
-const currentTheme = localStorage.getItem('theme');
 
-// Cek apakah sebelumnya sudah memilih Dark Mode
-if (currentTheme) {
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  if (currentTheme === 'dark') {
-      toggleSwitch.checked = true;
-  }
+/**
+ * Fungsi Sinkronisasi: Memastikan visual tombol = data di localStorage
+ */
+function syncTheme() {
+    const currentTheme = localStorage.getItem('theme');
+    
+    if (currentTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        // Validasi: Jika data 'dark', pastikan tombol terpilih (checked)
+        if (toggleSwitch) toggleSwitch.checked = true;
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        // Validasi: Jika data 'light' atau kosong, pastikan tombol tidak terpilih
+        if (toggleSwitch) toggleSwitch.checked = false;
+    }
 }
 
-// Fungsi untuk mengganti tema
-function switchTheme(e) {
-  if (e.target.checked) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem('theme', 'dark');
-  } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-      localStorage.setItem('theme', 'light');
-  }    
-}
+// Jalankan sinkronisasi saat halaman pertama kali dimuat atau kembali dari back button
+window.addEventListener('pageshow', (event) => {
+    syncTheme();
+});
 
-toggleSwitch.addEventListener('change', switchTheme, false);
+// Event listener untuk perubahan manual saat tombol diklik
+toggleSwitch.addEventListener('change', (e) => {
+    if (e.target.checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+    }
+});

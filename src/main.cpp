@@ -1,4 +1,3 @@
-
 #include <Arduino.h>
 #include <driver/i2s.h>
 #include <math.h>
@@ -8,16 +7,23 @@
 
 #include <WiFiClientSecure.h>
 #include <PubSubClient.h>
+#include "secrets.h"
 
 /*===================================
 WiFi Configuration
 ===================================*/
 
-const char* ssid = "Juanda_airport"; 
-const char* password = "juandahebat";
+const char* ssid = SECRET_SSID; 
+const char* password = SECRET_WIFI_PASS;
 
-const char* mqtt_server = "b8ae4809915f4027b2d18c7fc219b204.s1.eu.hivemq.cloud";
-const int mqtt_port = 8883;
+/*===================================
+MQTT Configuration
+===================================*/
+const char* mqtt_server = SECRET_MQTT_SERVER;
+const int mqtt_port = SECRET_MQTT_PORT;
+const char* mqtt_user = SECRET_MQTT_USER;
+const char* mqtt_pass = SECRET_MQTT_PASS;
+
 // const char* mqtt_topic = "spl/data";
 
 WiFiClientSecure espClient;
@@ -42,7 +48,7 @@ void reconnectMQTT() {
   Serial.print("MQTT connecting...");
   String clientId = "ESP32_" + String(NODE_ID) + "_" + String(random(1000));
 
-  if (client.connect(clientId.c_str(), "esp32-v1", "RajaSawit_2026")) {
+  if (client.connect(clientId.c_str(), mqtt_user, mqtt_pass)) {
     Serial.println("connected");
   } else {
     Serial.print("failed rc=");

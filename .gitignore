@@ -18,3 +18,8 @@ __pycache__/
 # Environment Variables
 .env
 
+# Credentials
+src/secrets.h
+
+web-app/simulator.py
+
