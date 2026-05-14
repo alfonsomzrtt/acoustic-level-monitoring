@@ -7,13 +7,14 @@ The quality and configuration of the Public Address (PA) system significantly in
 
 To resolve these issues, I developed a low-cost, functional IoT Sound Pressure Level Monitoring and data acquisition system. Using the INMP441 MEMS I2S microphone and ESP32 microcontroller as the core hardware, the system connects to a web-based dashboard. This allows local technicians to remotely monitor devices in real time, eliminating the need for frequent physical site visits.
 
-I will try to comprise everything in this following items: 
-1. System Design/Architecture
-1.1
-2.
-2.1
-3. 
-3.1
+I will try to comprise everything in this following items:
+- System Design/Architecture
+- Firmware Logics/DSP Pipeline
+- Pinout and Configuration
+- Web-app dashboard
+- MQTT Network Protocol 
+- 3D print and Enclosure Box
+- Bill of Materials (BOMs)
 
 ### System Architecture
 ```mermaid
@@ -39,7 +40,7 @@ graph TD
     end
 
     subgraph Web["User Interface (Monitoring)"]
-        I[Web Dashboard Dashboard.html]
+        I[Web Dashboard overview.html, dashboard.html]
         J[Client-Side CSV Export]
     end
 
@@ -53,6 +54,42 @@ graph TD
     H --> I
     I --> J
 ```
+
+This is the system architecture flowchart, covering end-to-end from sensor (sensing layer) and raw data acquisition to client-side, end-user web-app monitoring dashboard (application layer). The system works in this direction: 
+- First
+- asdasd
+- adasd
+- 
+###  Pinout Configuration
+<p align="center">
+    <img src="image1.png" width="80%" alt="Pinout Configuration with ESP32 DevKit V1 board" />
+    <br>
+    <em>Pinout Configuration with ESP32 DevKit V1 board</em>
+    <br>
+    <em>source: https://cirkitdesigner.com/</em>
+</p>
+
+The system operates in **I2S Standard Mode (Philips)**, allowing for a direct 24-bit digital stream from the MEMS sensor to the ESP32's internal DMA buffer.
+
+| INMP441 Pin | ESP32 Pin | Function | Description |
+| :--- | :--- | :--- | :--- |
+| **VDD** | 3V3 | Power | Power supply (1.62V - 3.63V) |
+| **GND** | GND | Ground | Common system ground |
+| **L/R** | GND | Channel Select | Pulled to GND for Left Channel acquisition |
+| **WS** | GPIO 25 | Word Select | I2S Word/Slot select line |
+| **SCK** | GPIO 26 | Bit Clock | I2S Serial Clock line |
+| **SD** | GPIO 33 | Serial Data | I2S Digital Data output |
+> **Note:** The **MCLK (Master Clock)** line is not required for this implementation, as the INMP441 generates its internal timing from the SCK line.
+
+| LCD I2C Pin | ESP32 Pin | Function | Description |
+| :--- | :--- | :--- | :--- |
+| **VDD** | VIN | Power | Recommended power supply 5V |
+| **GND** | GND | Ground | Common Ground  |
+| **SDA** | GPIO 21 | Serial Data | I2C Serial Data Line |
+| **SCL** | GPIO 22 | Serial Clock |  I2C Serial CLock Line |
+> **Note:** The **LCD 16x2 I2C** usually requires stable 5V power supply for best contrast, while INMP441 must use 3.3v according to the datasheet.
+
+
 ### Firmware Logics/DSP Pipeline
 ```mermaid
 flowchart TD
