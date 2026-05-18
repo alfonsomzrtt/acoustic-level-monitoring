@@ -22,4 +22,4 @@ __pycache__/
 src/secrets.h
 
 web-app/simulator.py
-
+web-app/frontend/js/config-local.js

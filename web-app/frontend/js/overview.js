@@ -2,16 +2,17 @@
 // CONFIG & STATE
 // =========================
 //sebagai contoh, ubah sendiri sesuai konfigurasi HIVEMQ MQTT broker
-const BROKER = "__MQTT_BROKER__";
-const PORT = "__MQTT_PORT__";
-const USER = "__MQTT_USER__";
-const PASS = "__MQTT_PASS__";
+const BROKER = window.MQTT_LOCAL_CONFIG?.BROKER || "__MQTT_BROKER__";
+const PORT = window.MQTT_LOCAL_CONFIG?.PORT || "__MQTT_PORT__";
+const USER = window.MQTT_LOCAL_CONFIG?.USER || "__MQTT_USER__";
+const PASS = window.MQTT_LOCAL_CONFIG?.PASS || "__MQTT_PASS__";
 
 const TIMEOUT = 10000; // ms → dianggap offline
 
-// 1. Tentukan daftar gate yang dimiliki, hardcoded
-const INITIAL_NODES = ["GATE1", "GATE2", "GATE3", "GATE4", "GATE5", "GATE6", "GATE7"];
-// const INITIAL_NODES = raw_nodes.map(node => node.toUpperCase());
+// 1. Tentukan daftar gate yang dimiliki, hardcoded, membuat gate-gatenya
+const INITIAL_NODES = ["GATE1", "GATE2", "GATE3", "GATE4", "GATE5", "GATE6", "GATE7", "GATE8", "GATE9", 
+"GATE10", "GATE11", "GATE12", "GATE13", "GATE14", "GATE15" ]; 
+
 const nodes = {}; 
 
 
@@ -190,7 +191,7 @@ setInterval(checkOffline, 2000);
 // =========================
 const client = new Paho.MQTT.Client(
   BROKER,
-  PORT,
+  Number(PORT),
   "overview_" + Math.random()
 );
 

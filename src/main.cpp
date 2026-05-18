@@ -32,8 +32,8 @@ PubSubClient client(espClient);
 // ===============================
 // NODE CONFIG
 // ===============================
-#define NODE_ID "GATE2"   // <-- GANTI tiap device
-String topic_pub = "monitoring/" + String(NODE_ID) + "/db";
+#define NODE_ID "GATE7"   // <-- GANTI tiap device
+String topic_pub = "monitoring/" + String(NODE_ID) + "/db"; // <-topicnya 
 unsigned long lastReconnectAttempt = 0;
 
 unsigned long lastPublish = 0;

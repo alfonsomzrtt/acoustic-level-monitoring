@@ -2,10 +2,10 @@
 // =========================
 // CONFIG
 // =========================
-const BROKER = "__MQTT_BROKER__";
-const PORT = "__MQTT_PORT__";
-const USER = "__MQTT_USER__";
-const PASS = "__MQTT_PASS__";
+const BROKER = window.MQTT_LOCAL_CONFIG?.BROKER || "__MQTT_BROKER__";
+const PORT = window.MQTT_LOCAL_CONFIG?.PORT || "__MQTT_PORT__";
+const USER = window.MQTT_LOCAL_CONFIG?.USER || "__MQTT_USER__";
+const PASS = window.MQTT_LOCAL_CONFIG?.PASS || "__MQTT_PASS__";
 
 const MAX_POINTS = 30;
 const TIMEOUT = 5000; // ms
@@ -287,6 +287,23 @@ function downloadCSV() {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
+
+
+
+// ==========================================
+// ANTI-REFRESH ALERT (EPHEMERALITY SAFETY)
+// ==========================================
+window.addEventListener('beforeunload', function (e) {
+  // Hanya kunci halaman jika logBuffer sudah berisi data sensor
+  if (logBuffer.length > 0) {
+    const pesanPeringatan = "CSV belum diekspor. Yakin ingin keluar?";
+    
+    // Memasukkan teks sesuai keinginan Anda (untuk kompatibilitas)
+    e.returnValue = pesanPeringatan; 
+    return pesanPeringatan;
+  }
+});
+
 
 const toggleSwitch = document.querySelector('#theme-toggle');
 
