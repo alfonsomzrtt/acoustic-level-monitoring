@@ -21,5 +21,6 @@ __pycache__/
 # Credentials
 src/secrets.h
 
+#skrip simulator untuk mencoba simulasi banyak gate
 web-app/simulator.py
 web-app/frontend/js/config-local.js
