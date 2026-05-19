@@ -5,7 +5,7 @@ This project aims to address several challenges I found during my internship per
 
 The quality and configuration of the Public Address (PA) system significantly influence sound and noise levels. Poor settings can lead to sound pollution, causing hearing damage, personal discomfort, and making announcements can hardly be heard or understood clearly.
 
-To resolve these issues, I developed a low-cost, functional IoT Sound Pressure Level Monitoring and data acquisition system. Using the INMP441 MEMS I2S microphone and ESP32 microcontroller as the core hardware, the system connects to a web-based dashboard. This allows local technicians to remotely monitor devices in real time, eliminating the need for frequent physical site visits.
+To addres these issues, I developed a low-cost, functional IoT Sound Pressure Level Monitoring and data acquisition system. The   device I am developing here is based on the usage of [S8607 Sound Level Meter Product](https://tk.tokopedia.com/ZSxM6enKe/) here by the local technicians. The reading decibel-A data is also adapted from the device's specifications. Using the INMP441 MEMS I2S microphone and ESP32 microcontroller as the core hardware, the system connects to a web-based dashboard hosted on the Github Pages. This allows local technicians to remotely monitor devices in real time, eliminating the need for frequent physical site visits.
 
 I will try to comprise everything in this following items:
 - System Design/Architecture
