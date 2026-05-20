@@ -2,21 +2,40 @@
 **An IoT-Based Distributed Sound Pressure Level Monitoring System**
 ---
 
+## Overview
+
 This project aims to address several challenges I found during my internship period at PT Angkasa Pura Indonesia (Injourney Airports). Currently, monitoring sound pressure levels at Juanda International Airport boarding gates requires manual, on-site device checks, which often fail to accurately reflect the noise perceived by visitors and passengers.
     
 The quality and configuration of the Public Address (PA) system significantly influence sound and noise levels. Poor settings can lead to sound pollution, causing hearing damage, personal discomfort, and making announcements can hardly be heard or understood clearly.
     
 To addres these issues, I developed a low-cost, functional IoT Sound Pressure Level Monitoring and data acquisition system. The   device I am developing here is based on the usage of [S8607 Sound Level Meter Product](https://tk.tokopedia.com/ZSxM6enKe/) here by the local technicians. The reading decibel-A data is also adapted from the device's specifications. Using the INMP441 MEMS I2S microphone and ESP32 microcontroller as the core hardware, the system connects to a web-based dashboard hosted on the Github Pages. This allows local technicians to remotely monitor devices in real time, eliminating the need for frequent physical site visits.
 
+### 🎯 Key Features
+- **Real-time dBA Monitoring**: Professional A-weighted measurements with 125ms fast response time
+- **Edge DSP Processing**: On-device filtering (DC removal, A-weighting biquad, EMA smoothing)
+- **Cloud Integration**: Secure MQTT/TLS to HiveMQ Cloud for data persistence
+- **Browser-Based Dashboard**: Client-side visualization with WebSocket real-time updates
+- **Low-Cost BOM**: ~$50-100 for a fully functional monitoring unit
+- **Local & Remote Display**: 16x2 I2C LCD + web dashboard
+- **Non-Blocking Architecture**: Simultaneous audio processing, display updates, and network telemetry
 
-I will try to comprise everything in this following items:
-- System Design/Architecture
-- Firmware Logics/DSP Pipeline
-- Pinout and Configuration
-- Web-app dashboard
-- MQTT Network Protocol 
-- 3D print and Enclosure Box
-- Bill of Materials (BOMs)
+  
+## Table of Contents
+- [Quick Start](#quick-start)
+- [System Architecture](#system-architecture)
+- [Hardware Setup](#hardware-setup)
+- - [Pinout Configuration](#pinout-configuration)
+- [Installation & Configuration](#installation--configuration)
+  - [Prerequisites](#prerequisites)
+  - [Firmware Setup](#firmware-setup)
+  - [WiFi & MQTT Configuration](#wifi--mqtt-configuration)
+  - [Calibration](#calibration)
+- [Firmware Logics/DSP Pipeline](#firmware-logicsdsp-pipeline)
+- [Web-app dashboard](#webapp-dashboard)
+- [3D print and Enclosure Box](#3dprint-design-CAD)
+- [Bill of Materials] (BOMs)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
 
 ### System Architecture
 ```mermaid
@@ -60,23 +79,29 @@ dashboard.html]
 
 This is the system architecture flowchart, covering end-to-end from sensor (sensing layer) and raw data acquisition to client-side, end-user web-app monitoring dashboard (application layer). The system works in this sequence of layers: Sensing, Processing, and Output.
 
----
-**Layer Breakdown**
-- Sensing Layer: INMP441 I2S Microphone: Responsible for capturing sound waves from the physical environment. It uses a pure I2S interface to ensure high-speed audio data acquisition without overloading the microcontroller's internal ADC.
-- Processing Layer (ESP32): This layer utilizes the FPU (Floating Point Unit) available on the ESP32 for heavy mathematical calculations:
+## Layer Breakdown
+
+- **Sensing Layer**: INMP441 I2S Microphone: Responsible for capturing sound waves from the physical environment. It uses a pure I2S interface to ensure high-speed audio data acquisition without overloading the microcontroller's internal ADC.
+  
+- **Processing Layer (ESP32)**: This layer utilizes the FPU (Floating Point Unit) available on the ESP32 for heavy mathematical calculations:
   - I2S Peripheral: Fetches raw 32-bit audio data (with 24-bit valid data) directly from the microphone.
   - DSP Core: The core of digital signal processing. It performs DC bias removal (eliminating signal offset), applies an A-Weighting filter (adjusting sensitivity to match human hearing), and calculates the RMS (Root Mean Square) value.
   - Logic: Converts the RMS value into calibrated decibels (SPL) and applies an EMA (Exponential Moving Average) to smooth out signal spikes, making the data more stable for reading.
-- Output Layer:
-  - Local Display: Displays the noise level (SPL) in real-time and independently on a 16x2 LCD screen at the hardware's location.
-  - Remote Transmission (HiveMQ Cloud): Periodically sends telemetry data using the MQTT protocol (with built-in ACL for security) to the cloud.
-  - Web App Dashboard: Runs entirely on the client-side (browser) without the need for an expensive backend server, fetching real-time data via WebSockets to be visualized for the end user.
+    
+- **Output Layer**:
+  - **Local Display**: Displays the noise level (SPL) in real-time and independently on a 16x2 LCD screen at the hardware's location.
+  - **Remote Transmission (HiveMQ Cloud)**: Periodically sends telemetry data using the MQTT protocol (with built-in ACL for security) to the cloud.
+  - **Web App Dashboard**: Runs entirely on the client-side (browser) without the need for an expensive backend server, fetching real-time data via WebSockets to be visualized for the end user.
 
 
 ``` So, in a nutshell: INMP441 captures the audio signal, raw 24-bit data via I2S protocol -> The ESP32 processes them -> The Network Layer transmits it via MQTT pub-sub -> The Web App visualizes the graphs and charts.```
 
+--- 
 
-###  Pinout Configuration
+## Hardware Setup
+
+### Pinout Configuration
+
 <p align="center">
     <img src="image1.png" width="80%" alt="Pinout Configuration with ESP32 DevKit V1 board" />
     <br>
@@ -103,7 +128,30 @@ The system operates in **I2S Standard Mode (Philips)**, allowing for a direct 24
 | **GND** | GND | Ground | Common Ground  |
 | **SDA** | GPIO 21 | Serial Data | I2C Serial Data Line |
 | **SCL** | GPIO 22 | Serial Clock |  I2C Serial CLock Line |
-> **Note:** The **LCD 16x2 I2C** usually requires stable 5V power supply for best contrast, while INMP441 must use 3.3v according to the datasheet.
+> **Note:** The **LCD 16x2 I2C** requires stable 5V power supply for best contrast, INMP441 must use 3.3v according to the datasheet.
+
+---
+
+## Installation & Configuration
+
+### Prerequisites
+
+- **Hardware**
+  - ESP32 DevKit V1
+  - INMP441 MEMS I2S Microphone
+  - 16x2 I2C LCD Display
+  - Jumper wires
+  - USB cable for programming
+  - 5V power supply (recommended)
+
+- **Software**
+  - Arduino IDE 2.3+ or the latest platormIO stable version 6.1.19
+  - ESP32 Board Package (via Board Manager)
+  - Required Libraries:
+    - `driver/i2s.h` (ESP32 native)
+    - `Wire.h` (I2C, native)
+    - `PubSubClient.h` (MQTT)
+    - `LiquidCrystal_I2C.h` (LCD control)
 
 
 ### Firmware Logics/DSP Pipeline
