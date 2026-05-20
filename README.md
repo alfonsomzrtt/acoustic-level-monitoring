@@ -57,7 +57,7 @@ Get AcousticLevel running in 5 minutes:
    ```
 
 3. **Configure WiFi & MQTT**
-   - Edit `config.h` with your WiFi SSID, password, and HiveMQ broker credentials
+   - Edit `secrets.h` with your WiFi SSID, password, and HiveMQ broker credentials
    - Device will auto-connect on boot
 
 4. **Access Dashboard**
