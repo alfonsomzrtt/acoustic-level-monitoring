@@ -229,7 +229,7 @@ The system operates in **I2S Standard Mode (Philips)**, enabling direct 24-bit d
 
 ### WiFi & MQTT Configuration
 
-Edit `firmware/config.h` with your credentials:
+Edit `firmware/secrets.h` with your credentials:
 
 ```cpp
 // WiFi
@@ -262,7 +262,7 @@ For accurate SPL readings:
    - Calculate offset: `offset = reference_dB - reported_dB`
 
 2. **Apply Calibration**
-   - Edit `firmware/config.h`:
+   - Edit `src/secrets.h`:
      ```cpp
      const float SPL_OFFSET = 0.0;  // Adjust this value
      ```
@@ -381,7 +381,7 @@ The web dashboard provides real-time visualization of acoustic data.
 **Symptoms**: WiFi connects but data not published to HiveMQ
 
 **Solutions**:
-1. Verify broker address and credentials in `config.h`
+1. Verify broker address and credentials in `secrets.h`
 2. Check TLS port (8883) not blocked by firewall
 3. Confirm ACL allows publishing to `acoustic/sensor/dba`
 4. Monitor Serial output at 115200 baud for error messages
@@ -395,7 +395,7 @@ The web dashboard provides real-time visualization of acoustic data.
 1. Verify INMP441 uses 3.3V (not 5V)
 2. Check L/R pin grounded (left channel selection)
 3. Add 0.1µF capacitors on INMP441 power lines
-4. Increase EMA smoothing factor in `config.h` (default 0.7)
+4. Increase EMA smoothing factor in `secrets.h` (default 0.7)
 5. Verify microphone not obstructed or near vibration source
 
 ### WiFi Reconnection Issues
@@ -414,9 +414,9 @@ The web dashboard provides real-time visualization of acoustic data.
 
 ```
 acoustic-level-monitoring/
-├── firmware/
-│   ├── main.ino              # Main sketch
-│   ├── config.h              # WiFi, MQTT, calibration settings
+├── src/
+│   ├── main.cpp              # Main sketch
+│   ├── secrets.h              # WiFi, MQTT, calibration settings
 │   ├── dsp_pipeline.h        # DSP algorithms
 │   └── i2c_scanner.ino       # I2C address detection utility
 ├── web/
